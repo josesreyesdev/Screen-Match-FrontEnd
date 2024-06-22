@@ -10,7 +10,7 @@ const fichaDescripcion = document.getElementById('ficha-descripcion');
 function cargarTemporadas() {
     getDatos(`/series/${serieId}/temporadas/todas`)
         .then(data => {
-            const temporadasUnicas = [...new Set(data.map(temporada => temporada.temporada))];
+            const temporadasUnicas = [...new Set(data.map(temporada => temporada.season))];
             listaTemporadas.innerHTML = ''; // Limpia las opciones existentes
 
             const optionDefault = document.createElement('option');
@@ -39,17 +39,17 @@ function cargarTemporadas() {
 function cargarEpisodios() {
     getDatos(`/series/${serieId}/temporadas/${listaTemporadas.value}`)
         .then(data => {
-            const temporadasUnicas = [...new Set(data.map(temporada => temporada.temporada))];
+            const temporadasUnicas = [...new Set(data.map(temporada => temporada.season))];
             fichaSerie.innerHTML = ''; 
             temporadasUnicas.forEach(temporada => {
                 const ul = document.createElement('ul');
                 ul.className = 'episodios-lista';
 
-                const episodiosTemporadaAtual = data.filter(serie => serie.temporada === temporada);
+                const episodiosTemporadaAtual = data.filter(serie => serie.season === temporada);
 
                 const listaHTML = episodiosTemporadaAtual.map(serie => `
                     <li>
-                        ${serie.numeroEpisodio} - ${serie.titulo}
+                        ${serie.episodeNumber} - ${serie.title}
                     </li>
                 `).join('');
                 ul.innerHTML = listaHTML;
@@ -72,13 +72,13 @@ function cargarInfoSerie() {
     getDatos(`/series/${serieId}`)
         .then(data => {
             fichaDescripcion.innerHTML = `
-                <img src="${data.poster}" alt="${data.titulo}" />
+                <img src="${data.poster}" alt="${data.title}" />
                 <div>
-                    <h2>${data.titulo}</h2>
+                    <h2>${data.title}</h2>
                     <div class="descricao-texto">
-                        <p><b>Média de evaluaciones:</b> ${data.evaluacion}</p>
-                        <p>${data.sinopsis}</p>
-                        <p><b>Actores:</b> ${data.actores}</p>
+                        <p><b>Média de evaluaciones:</b> ${data.evaluation}</p>
+                        <p>${data.synopsis}</p>
+                        <p><b>Actores:</b> ${data.actors}</p>
                     </div>
                 </div>
             `;
